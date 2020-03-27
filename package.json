@@ -1,0 +1,30 @@
+{
+  "name": "momiji-bot",
+  "version": "0.0.1",
+  "description": "ayy lmao",
+  "main": "dist/momiji.js",
+  "dependencies": {
+    "bufferutil": "^4.0.1",
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.0",
+    "typescript": "^3.7.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build ./tsconfig.json",
+    "prestart": "tsc --build ./tsconfig.json",
+    "start": "cd dist && node ./momiji.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/futomomo/momiji-bot.git"
+  },
+  "author": "sixten",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/futomomo/momiji-bot/issues"
+  },
+  "homepage": "https://github.com/futomomo/momiji-bot#readme"
+}
