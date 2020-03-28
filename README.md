@@ -1,2 +1,2 @@
 # momiji-bot
-lmao
+![momiji](./momiji.jpg)
