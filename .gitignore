@@ -108,3 +108,6 @@ token
 
 # vim swap file
 *.swp
+
+# output directory
+bin/

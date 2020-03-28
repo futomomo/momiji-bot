@@ -1,10 +1,12 @@
 import {Momiji} from './Momiji';
 import * as fs from 'fs';
+import * as process from 'process';
 
 
 
 function main() {
     let token: string = "";
+
     try {
         token = fs.readFileSync('token', { 'encoding': 'utf8', 'flag': 'r' });
         console.log('Successfully read token file.');

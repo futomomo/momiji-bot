@@ -1,10 +1,10 @@
 {
     "name": "momiji-bot",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "ayy lmao",
-    "main": "dist/Entrypoint.js",
+    "main": "bin/Entrypoint.js",
     "files": [
-        "dist/"
+        "bin/"
     ],
     "dependencies": {
         "discord.js": "^11.6.3"
@@ -15,8 +15,8 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc --build ./tsconfig.json && npm --no-git-tag-version version patch",
-        "start": "node dist/Entrypoint.js"
+        "build": "tsc --build ./tsconfig.json",
+        "start": "node bin/Entrypoint.js"
     },
     "repository": {
         "type": "git",

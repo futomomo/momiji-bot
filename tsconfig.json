@@ -6,7 +6,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./bin",
     "strict": true,
     "strictNullChecks": false,
     "strictFunctionTypes": true,
