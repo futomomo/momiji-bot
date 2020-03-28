@@ -105,3 +105,6 @@ dist
 
 # token file created by momiji
 token
+
+# vim swap file
+*.swp
