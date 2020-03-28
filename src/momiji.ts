@@ -41,7 +41,7 @@ export class Momiji {
         let dir_list: Dirent[] = readdirSync(commands_path, {'encoding': 'utf8', 'withFileTypes': true});
         for(let entry of dir_list) {
             if(entry.isFile() && entry.name.endsWith('.js')) {
-                import('.\\commands\\'+entry.name)
+                import('.\\commands\\'+entry.name) // this makes me feel bad TODO: fix somehow
                 .then((module: any) => {
                     if(module.getCommand) {
                         let command_object: Command = module.getCommand();

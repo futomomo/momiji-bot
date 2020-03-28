@@ -1,7 +1,7 @@
 {
     "name": "momiji-bot",
     "version": "0.2.0",
-    "description": "ayy lmao",
+    "description": "Momiji Discord bot",
     "main": "bin/Entrypoint.js",
     "files": [
         "bin/"

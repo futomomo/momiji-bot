@@ -19,6 +19,7 @@
     "src/Entrypoint.ts",
     "src/Momiji.ts",
     "src/Command.ts",
-    "src/commands/Pong.ts"
+    "src/commands/Pong.ts",
+    "src/commands/Roll.ts"
   ]
 }
