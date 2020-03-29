@@ -1,14 +1,7 @@
-import {Command} from '../Command';
-import {Message as DiscordMessage} from 'discord.js';
+import {Command, Message as DiscordMessage} from '../Command';
 
 class PongCommand implements Command {
-    private name: string;
-    private description: string;
-
-    constructor() {
-        this.name = 'ping';
-        this.description = 'When you say "Ping" Momiji says "Pong"!';
-    };
+    constructor() {};
 
 
     public Execute(message: DiscordMessage) {
@@ -18,8 +11,8 @@ class PongCommand implements Command {
                    console.error('ERROR WHILE SENDING PONG!\n' + error);
                });
     };
-    public GetName(): string { return this.name; };
-    public GetDescription(): string { return this.description; };
+    public GetName(): string { return 'ping'; };
+    public GetDescription(): string { return 'When you say "Ping" Momiji says "Pong"!'; };
 }
 
 export function getCommand(): Command { return new PongCommand(); };

@@ -1,5 +1,6 @@
-import {Message as DiscordMessage, Client as DiscordClient} from 'discord.js';
+import {Message as DiscordMessage} from 'discord.js';
 
+export {Message} from 'discord.js';
 
 export interface Command {
     Execute: (message: DiscordMessage) => void;

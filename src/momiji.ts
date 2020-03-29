@@ -1,41 +1,27 @@
-import * as Discord from 'discord.js';
+import {BaseBot, Discord} from './BaseBot';
+import {MomijiAPI} from './MomijiAPI';
 import {Command} from './Command';
 import {readdirSync, Dirent} from 'fs';
 
-export class Momiji {
-    private client: Discord.Client;
+export class Momiji extends BaseBot implements MomijiAPI {
     private commands: Map<string, Command>;
 
     constructor(token: string) {
-        this.client = new Discord.Client();
-        this.client.on('ready', () =>
-                       this.onReady());
-        this.client.on('disconnect', () =>
-                       this.onDisconnect());
-        this.client.on('message', (message: Discord.Message) =>
-                       this.onMessage(message));
-        this.client.on('messageUpdate', (old_message: Discord.Message, new_message: Discord.Message) =>
-                       this.onMessageUpdate(old_message, new_message));
-        this.client.on('exit', () =>
-                       this.onExit());
-        this.client.on('warn', (info: string) =>
-                       this.onWarn(info));
-        this.client.on('error', (error: Error) =>
-                       this.onError(error));
+        super();
 
         process.on('SIGINT', (signal: NodeJS.Signals) =>
-                   this.onSignal(signal));
+                   this.OnSignal(signal));
 
-        this.importCommands();
+        this.ImportCommands();
 
         this.client.login(token)
             .catch((error: Error) => {
             console.error('ERROR: Failed to log into Discord:\n' + error);
-            this.onExit();
+            this.OnExit();
         });
     };
 
-    private importCommands(): void {
+    private ImportCommands(): void {
         this.commands = new Map();
         const commands_path: string = 'bin/commands/';
         let dir_list: Dirent[] = readdirSync(commands_path, {'encoding': 'utf8', 'withFileTypes': true});
@@ -57,41 +43,41 @@ export class Momiji {
         }
     };
 
-    private onReady(): void {
+    protected OnReady(): void {
         console.log('Successfully logged into Discord!');
     };
 
-    private onMessage(message: Discord.Message): void {
+    protected OnMessage(message: Discord.Message): void {
         if(message.author.bot) return;
         if(message.content.startsWith('!')) {this.HandleCommand(message)}
     };
 
-    private onMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
-        if((old_message.content != new_message.content)) this.onMessage(new_message);
+    protected OnMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
+        if((old_message.content != new_message.content)) this.OnMessage(new_message);
     };
 
-    private onDisconnect(): void {
+    protected OnDisconnect(): void {
         console.warn('WARN: Disconnected from Discord');
-        this.onExit();
+        this.OnExit();
     };
 
-    private onSignal(signal: NodeJS.Signals): void {
+    protected OnSignal(signal: NodeJS.Signals): void {
         console.error(`FATAL: ${signal} recieved, exiting...`);
-        this.onExit();
+        this.OnExit();
     };
 
-    private onExit(): void {
+    protected OnExit(): void {
         console.log('Destroying Momiji and exiting.');
         this.client.destroy();
         process.exit(1);
     };
 
-    private onError(error: Error): void {
+    protected OnError(error: Error): void {
         console.error(error);
-        this.onExit();
+        this.OnExit();
     };
 
-    private onWarn(info: string): void {
+    protected OnWarning(info: string): void {
         console.warn(info);
     };
 

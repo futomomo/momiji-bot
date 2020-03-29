@@ -1,21 +1,15 @@
-import {Command} from '../Command';
-import {Message as DiscordMessage} from 'discord.js';
+import {Command, Message as DiscordMessage} from '../Command';
 
-class PongCommand implements Command {
-    private name: string;
-    private description: string;
-
-    constructor() {
-        this.name = 'roll';
-        this.description = 'Make a roll of the dice.';
-    };
+class RollCommand implements Command {
+    private name = 'roll';
+    constructor() {};
 
 
     public Execute(message: DiscordMessage) {
         let arg_string: string = message.content.substr(this.name.length+2).trim();
     };
     public GetName(): string { return this.name; };
-    public GetDescription(): string { return this.description; };
+    public GetDescription(): string { return 'Make a roll of the dice.'; };
 }
 
-export function getCommand(): Command { return new PongCommand(); };
+export function getCommand(): Command { return new RollCommand(); };
