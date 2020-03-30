@@ -19,6 +19,8 @@
     "src/BaseBot.ts",
     "src/MomijiAPI.ts",
     "src/commands/Pong.ts",
-    "src/commands/Roll.ts"
+    "src/commands/Roll.ts",
+    "src/commands/Killawoo.ts",
+    "src/commands/GetMyID.ts"
   ]
 }

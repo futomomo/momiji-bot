@@ -12,7 +12,9 @@ class PongCommand implements Command {
                });
     };
     public GetName(): string { return 'ping'; };
-    public GetDescription(): string { return 'When you say "Ping" Momiji says "Pong"!'; };
+    public GetDescription(): string {
+      return 'When you say "Ping" Momiji says "Pong"!';
+    };
     public GetUsage(): string { return '!ping'; };
 }
 

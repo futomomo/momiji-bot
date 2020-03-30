@@ -1,10 +1,12 @@
+import {Dirent, readdirSync} from 'fs';
+
 import {BaseBot, Discord} from './BaseBot';
-import {MomijiAPI} from './MomijiAPI';
 import {Command} from './Command';
-import {readdirSync, Dirent} from 'fs';
+import {MomijiAPI} from './MomijiAPI';
 
 export class Momiji extends BaseBot implements MomijiAPI {
     private commands: Map<string, Command>;
+    private is_exiting: boolean = false;
 
     constructor(token: string) {
         super();
@@ -66,24 +68,24 @@ export class Momiji extends BaseBot implements MomijiAPI {
     };
 
     protected OnDisconnect(): void {
+        if(this.is_exiting) return;
         console.warn('FATAL: Disconnected from Discord');
-        this.OnExit();
+        this.HandleExit();
     };
 
     protected OnSignal(signal: NodeJS.Signals): void {
         console.error(`FATAL: ${signal} recieved, exiting...`);
-        this.OnExit();
+        this.HandleExit();
     };
 
     protected OnExit(): void {
-        console.log('Destroying Momiji and exiting.');
-        this.client.destroy();
-        process.exit(1);
+        console.log('Momiji is exiting...');
+        this.HandleExit();
     };
 
     protected OnError(error: Error): void {
         console.error(`ERROR: ${error}`);
-        this.OnExit();
+        this.HandleExit();
     };
 
     protected OnWarning(info: string): void {
@@ -114,4 +116,15 @@ export class Momiji extends BaseBot implements MomijiAPI {
             });
         }
     };
+
+    private HandleExit(exit_code: number = 1): void {
+        console.log('Destroying Momiji and exiting.');
+        this.is_exiting = true;
+        process.exitCode = exit_code;
+        this.client.destroy();
+    }
+
+    public MakeExit(): void {
+        this.HandleExit(0);
+    }
 }

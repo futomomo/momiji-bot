@@ -1,6 +1,6 @@
-import {Momiji} from './Momiji';
 import {readFileSync} from 'fs';
-import {exit} from 'process';
+
+import {Momiji} from './Momiji';
 
 let token: string = '';
 
@@ -10,7 +10,7 @@ try {
 }
 catch (err) {
     console.error('FATAL: Failed to read token from file, please provide a \'token\' file.\n' + err);
-    exit(1);
+    process.exit(1);
 }
 
 const momiji: Momiji = new Momiji(token);
