@@ -106,13 +106,13 @@ export class Momiji extends BaseBot implements MomijiAPI {
 
                 message.reply(error_out)
                 .catch((error: Error) => {
-                    console.error(`ERROR: Error trying to reply to message!`);
+                    console.error(error);
                 });
             }
         } else {
             message.reply('That command does not exist!!')
             .catch((error: Error) => {
-                console.error(`ERROR: Error trying to reply to message!`);
+                console.error(error);
             });
         }
     };
