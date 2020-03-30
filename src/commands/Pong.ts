@@ -1,10 +1,10 @@
-import {Command, Message as DiscordMessage} from '../Command';
+import {Command, Message as DiscordMessage, MomijiAPI} from '../Command';
 
 class PongCommand implements Command {
     constructor() {};
 
 
-    public Execute(message: DiscordMessage) {
+    public Execute(message: DiscordMessage, momiji: MomijiAPI) {
         message.reply('Pong!')
         .catch((error: Error) =>
                {
@@ -13,6 +13,7 @@ class PongCommand implements Command {
     };
     public GetName(): string { return 'ping'; };
     public GetDescription(): string { return 'When you say "Ping" Momiji says "Pong"!'; };
+    public GetUsage(): string { return '!ping'; };
 }
 
-export function getCommand(): Command { return new PongCommand(); };
+export function GetCommand(): Command { return new PongCommand(); };

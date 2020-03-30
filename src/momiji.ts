@@ -9,6 +9,8 @@ export class Momiji extends BaseBot implements MomijiAPI {
     constructor(token: string) {
         super();
 
+        this.commands = new Map();
+
         process.on('SIGINT', (signal: NodeJS.Signals) =>
                    this.OnSignal(signal));
 
@@ -21,24 +23,30 @@ export class Momiji extends BaseBot implements MomijiAPI {
         });
     };
 
-    private ImportCommands(): void {
+    private async ImportCommands(): Promise<void> {
         this.commands = new Map();
         const commands_path: string = 'bin/commands/';
         let dir_list: Dirent[] = readdirSync(commands_path, {'encoding': 'utf8', 'withFileTypes': true});
+        const whitespace_regex = /[\s]/g;
         for(let entry of dir_list) {
             if(entry.isFile() && entry.name.endsWith('.js')) {
-                import('.\\commands\\'+entry.name) // this makes me feel bad TODO: fix somehow
-                .then((module: any) => {
-                    if(module.getCommand) {
-                        let command_object: Command = module.getCommand();
-                        let name: string = command_object.GetName();
-                        console.log(`Found command ${name}.`);
-                        this.commands.set(name, command_object);
+                try {
+                    let module: any = await import('.\\commands\\'+entry.name); // this makes me feel bad  and probably only works on Windows TODO: fix somehow
+                    if(module.GetCommand !== undefined) {
+                        const command: Command = module.GetCommand();
+                        const name: string = command.GetName();
+                        if(name.search(whitespace_regex) !== -1) {
+                            console.warn(`WARN: Command class in file ${entry.name} returns a name with invalid characters at ${name.search(whitespace_regex)}\nThe command was not added.`);
+                            continue;
+                        }
+
+                        console.log(`Found command !${name}.`);
+                        this.commands.set(name, command);
+
                     }
-                })
-                .catch((error: Error) => {
+                } catch(error) {
                     console.error(`ERROR: Failed to import ${entry.name}\n${error}`);
-                });
+                }
             }
         }
     };
@@ -48,8 +56,9 @@ export class Momiji extends BaseBot implements MomijiAPI {
     };
 
     protected OnMessage(message: Discord.Message): void {
+        const command_char = '!';
         if(message.author.bot) return;
-        if(message.content.startsWith('!')) {this.HandleCommand(message)}
+        if(message.content.startsWith(command_char)) this.HandleCommand(message);
     };
 
     protected OnMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
@@ -57,7 +66,7 @@ export class Momiji extends BaseBot implements MomijiAPI {
     };
 
     protected OnDisconnect(): void {
-        console.warn('WARN: Disconnected from Discord');
+        console.warn('FATAL: Disconnected from Discord');
         this.OnExit();
     };
 
@@ -73,23 +82,30 @@ export class Momiji extends BaseBot implements MomijiAPI {
     };
 
     protected OnError(error: Error): void {
-        console.error(error);
+        console.error(`ERROR: ${error}`);
         this.OnExit();
     };
 
     protected OnWarning(info: string): void {
-        console.warn(info);
+        console.warn(`WARN: ${info}`);
     };
 
     private HandleCommand(message: Discord.Message): void {
         let cmd: string = message.content.split(' ')[0].substr(1);
         let args: string = message.content.substr(cmd.length+2).trim();
-        if(this.commands.has(cmd)) {
+        let command: Command | undefined;
+        if((command = this.commands.get(cmd))) {
             console.log(`Executing command '${cmd}' with arguments '${args}'`);
             try {
-                this.commands.get(cmd).Execute(message);
+                command.Execute(message, this);
             } catch(error) {
-                console.error(`ERROR: Something went wrong when executing command '${cmd}' with arguments '${args}'\n${error}`);
+                let error_out = `ERROR: Something went wrong when executing command '${cmd}' with arguments '${args}'\n${error}`;
+                console.error(error_out);
+
+                message.reply(error_out)
+                .catch((error: Error) => {
+                    console.error(`ERROR: Error trying to reply to message!`);
+                });
             }
         } else {
             message.reply('That command does not exist!!')

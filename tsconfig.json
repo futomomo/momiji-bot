@@ -5,20 +5,19 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
     "outDir": "./bin",
     "strict": true,
-    "strictNullChecks": false,
     "strictFunctionTypes": true,
     "alwaysStrict": true,
-    "noUnusedLocals": false,
-    "noFallthroughCasesInSwitch": true,
-    "declaration": true
+    "declaration": true,
+    "declarationMap": true
   },
   "files": [
     "src/Entrypoint.ts",
     "src/Momiji.ts",
     "src/Command.ts",
+    "src/BaseBot.ts",
+    "src/MomijiAPI.ts",
     "src/commands/Pong.ts",
     "src/commands/Roll.ts"
   ]

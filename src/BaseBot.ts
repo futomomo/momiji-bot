@@ -2,7 +2,6 @@ import * as Discord from 'discord.js';
 
 export * as Discord from 'discord.js';
 
-
 export abstract class BaseBot {
     protected client: Discord.Client;
     constructor() {
