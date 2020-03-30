@@ -1,6 +1,6 @@
 {
     "name": "momiji-bot",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Momiji Discord bot",
     "main": "bin/Entrypoint.js",
     "files": [
