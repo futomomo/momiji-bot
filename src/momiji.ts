@@ -122,6 +122,7 @@ export class Momiji extends BaseBot implements MomijiAPI {
         this.is_exiting = true;
         process.exitCode = exit_code;
         this.client.destroy();
+        process.exit(exit_code);
     }
 
     public MakeExit(): void {

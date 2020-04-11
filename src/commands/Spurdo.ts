@@ -7,8 +7,7 @@ function getRandomInt(max: number): number {
 class Spurdo implements Command {
     public Execute(message: DiscordMessage, momiji: MomijiAPI): void {
         let fugged_string: string = message.content.slice('spurdo'.length+2).trim();
-        fugged_string = fugged_string.replace(/c/gi, 'g');
-        fugged_string = fugged_string.replace(/k/gi, 'g');
+        fugged_string = fugged_string.replace(/[ck]/gi, 'g');
         fugged_string = fugged_string.replace(/th/gi, 'd');
         fugged_string = fugged_string.replace(/t/gi, 'd');
         fugged_string = fugged_string.replace(/p/gi, 'b');
