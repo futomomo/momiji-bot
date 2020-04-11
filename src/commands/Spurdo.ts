@@ -40,7 +40,7 @@ class Spurdo implements Command {
             final_fugged = final_fugged.concat(fugged_string.slice(last_match, pos), ' :', 'D'.repeat(getRandomInt(6)+2));
             last_match = pos;
         }
-        final_fugged = final_fugged.concat(fugged_string.slice(last_match, final_fugged.length));
+        final_fugged = final_fugged.concat(fugged_string.slice(last_match, fugged_string.length));
 
 
         message.reply(final_fugged)
