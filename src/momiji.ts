@@ -20,7 +20,7 @@ export class Momiji extends BaseBot implements MomijiAPI {
 
         this.client.login(token)
             .catch((error: Error) => {
-            console.error('ERROR: Failed to log into Discord:\n' + error);
+            console.error('ERROR: Failed to log into Discord:\n' + error.message);
             this.OnExit();
         });
     };

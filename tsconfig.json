@@ -23,6 +23,7 @@
     "src/commands/Killawoo.ts",
     "src/commands/GetMyID.ts",
     "src/commands/Spurdo.ts",
-    "src/commands/UwUTranslate.ts"
+    "src/commands/UwUTranslate.ts",
+    "src/commands/Awooimg.ts"
   ]
 }
