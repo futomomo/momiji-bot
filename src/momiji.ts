@@ -70,21 +70,21 @@ export class Momiji extends BaseBot implements MomijiAPI {
     protected OnDisconnect(): void {
         if(this.is_exiting) return;
         console.warn('FATAL: Disconnected from Discord');
-        this.HandleExit();
+        this.HandleExit(1);
     };
 
     protected OnSignal(signal: NodeJS.Signals): void {
         console.error(`FATAL: ${signal} recieved, exiting...`);
-        this.HandleExit();
+        this.HandleExit(1);
     };
 
     protected OnExit(): void {
         console.log('Momiji is exiting...');
-        this.HandleExit();
+        this.HandleExit(0);
     };
 
     protected OnError(error: Error): void {
-        console.error(`ERROR: ${error}`);
+        console.error(`ERROR: ${error.message}`);
         this.HandleExit();
     };
 
