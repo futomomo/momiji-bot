@@ -7,10 +7,10 @@
         "bin/"
     ],
     "dependencies": {
-        "discord.js": "^11.6.3"
+        "discord.js": "^11.6.4"
     },
     "devDependencies": {
-        "@types/node": "^13.9.5",
+        "@types/node": "^13.13.4",
         "typescript": "^3.8.3"
     },
     "scripts": {
