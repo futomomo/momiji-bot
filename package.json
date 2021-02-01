@@ -7,11 +7,14 @@
         "bin/"
     ],
     "dependencies": {
-        "discord.js": "^11.6.4"
+        "@discordjs/uws": "^10.149.0",
+        "bufferutil": "^4.0.1",
+        "discord.js": "^11.6.4",
+        "utf-8-validate": "^5.0.2"
     },
     "devDependencies": {
-        "@types/node": "^13.13.4",
-        "typescript": "^3.8.3"
+        "@types/node": "^13.13.40",
+        "typescript": "^3.9.5"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

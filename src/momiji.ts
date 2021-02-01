@@ -4,6 +4,12 @@ import {BaseBot, Discord} from './BaseBot';
 import {Command} from './Command';
 import {MomijiAPI} from './MomijiAPI';
 
+function getRandomInt(min: number, max: number): number {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
 export class Momiji extends BaseBot implements MomijiAPI {
     private commands: Map<string, Command>;
     private is_exiting: boolean = false;
@@ -60,7 +66,13 @@ export class Momiji extends BaseBot implements MomijiAPI {
     protected OnMessage(message: Discord.Message): void {
         const command_char = '!';
         if(message.author.bot) return;
-        if(message.content.startsWith(command_char)) this.HandleCommand(message);
+        if(message.content.startsWith(command_char)) {
+          this.HandleCommand(message);
+          return;
+        }
+        if (message.content.startsWith('Momiji ') && message.content.endsWith('?')) {
+          this.HandleQuestion(message);
+        }
     };
 
     protected OnMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
@@ -115,7 +127,53 @@ export class Momiji extends BaseBot implements MomijiAPI {
                 console.error(error);
             });
         }
-    };
+    }
+
+    private async HandleQuestion(message: Discord.Message): Promise<void> {
+      const question = message.content.slice(7, message.content.length-1);
+      if (question.includes('eller')) { // question is a choice separated by eller
+        const choices = question.split(' eller ');
+        const index = getRandomInt(0, choices.length);
+        const choice = choices[index];
+        try {
+          await message.reply(choice);
+        } catch(err) {
+          console.error('Error on line ' + err.lineNumber + ': ' + err.message);
+        }
+      } else { // question is a yes/no/maybe question
+        const fortunes = [
+          'As I see it, yes.',
+          'Ask again later.',
+          'Better not tell you now.',
+          'Cannot predict now.',
+          'Concentrate and ask again.',
+          'Don’t count on it.',
+          'It is certain.',
+          'It is decidedly so.',
+          'Most likely.',
+          'My reply is no.',
+          'My sources say no.',
+          'Outlook not so good.',
+          'Outlook good.',
+          'Reply hazy, try again.',
+          'Signs point to yes.',
+          'Very doubtful.',
+          'Without a doubt.',
+          'Yes.',
+          'Yes – definitely.',
+          'You may rely on it.'
+        ];
+        const index = getRandomInt(0, fortunes.length);
+        const fortune = fortunes[index];
+
+        try {
+          await message.reply('`' + fortune + '`');
+        } catch(err) {
+          console.error('Error on line ' + err.lineNumber + ': ' + err.message);
+        }
+      }
+
+    }
 
     private HandleExit(exit_code: number = 1): void {
         console.log('Destroying Momiji and exiting.');

@@ -18,14 +18,14 @@ class Spurdo implements Command {
         // isolate the blank indexes since that's where you wanna put the :DDDD
         while ((match = blank_regex.exec(fugged_string)) !== null) {
             matches.push(match.index);
-            console.log(`Found opening for :DD at ${match.index}`);
+            // console.log(`Found opening for :DD at ${match.index}`);
         }
         matches.push(fugged_string.length); // also push end of string
 
         let positions: number[] = [];
         // pick randomly at least 1 position to insert :DD up to a third of the max possible amount found in matches
         let max_fuggs = getRandomInt(Math.max(1, Math.floor(matches.length/3)))+1;
-        console.log(`Max fuggs: ${max_fuggs}`);
+        // console.log(`Max fuggs: ${max_fuggs}`);
         while (positions.length < max_fuggs) {
             let pos = getRandomInt(matches.length);
             positions.push(matches[pos]);
