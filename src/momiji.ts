@@ -65,7 +65,6 @@ export class Momiji extends BaseBot implements MomijiAPI {
   };
 
   protected OnMessage(message: Discord.Message): void {
-    console.log(`OnMessage: Message: ${message}`);
     const command_char = '!';
     if(message.author.bot) return;
     if(message.content.startsWith(command_char)) {
@@ -79,7 +78,6 @@ export class Momiji extends BaseBot implements MomijiAPI {
   };
 
   protected OnMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
-    console.log(`OnMessageUpdate:\nOld message: ${old_message}\nNew message: ${new_message}`);
     if((old_message.content != new_message.content)) this.OnMessage(new_message);
   };
 
@@ -134,9 +132,24 @@ export class Momiji extends BaseBot implements MomijiAPI {
   }
 
   private async HandleQuestion(message: Discord.Message): Promise<void> {
-    const question = message.content.slice(7, message.content.length-1);
+    // slice off the inital "Momiji " (7 characters) and also trim any
+    // punctuation (.!?)
+    const question =
+      message.content.slice(7, message.content.length).replace(/[.!?]/, "");
     if (question.includes('eller')) { // question is a choice separated by eller
-      const choices = question.split(' eller ');
+      const alternative_eller_regex = /(.{1,},){1,}.{1,}eller.{1,}/gm
+      let choices;
+      if (question.search(alternative_eller_regex) !== -1) {
+        choices = question.split(',');
+        choices = choices.slice(0, choices.length - 1)
+                    .concat(choices[choices.length - 1].split('eller'));
+      } else {
+        choices = question.split('eller');
+      }
+      // trim the choices to remove unnecessary whitespace
+      for (let i = 0; i < choices.length; ++i)
+        choices[i] = choices[i].trim();
+
       const index = getRandomInt(0, choices.length);
       const choice = choices[index];
       try {
@@ -145,13 +158,8 @@ export class Momiji extends BaseBot implements MomijiAPI {
         console.error('Error on line ' + err.lineNumber + ': ' + err.message);
       }
     } else { // question is a yes/no/maybe question
-      const fortunes = [
+      const yes_no_fortunes = [
         'As I see it, yes.',
-        'Ask again later.',
-        'Better not tell you now.',
-        'Cannot predict now.',
-        'Concentrate and ask again.',
-        'Don’t count on it.',
         'It is certain.',
         'It is decidedly so.',
         'Most likely.',
@@ -159,16 +167,30 @@ export class Momiji extends BaseBot implements MomijiAPI {
         'My sources say no.',
         'Outlook not so good.',
         'Outlook good.',
-        'Reply hazy, try again.',
         'Signs point to yes.',
         'Very doubtful.',
         'Without a doubt.',
         'Yes.',
         'Yes – definitely.',
-        'You may rely on it.'
+        'You may rely on it.',
       ];
-      const index = getRandomInt(0, fortunes.length);
-      const fortune = fortunes[index];
+      const maybe_fortunes = [
+        'Ask again later.',
+        'Better not tell you now.',
+        'Cannot predict now.',
+        'Concentrate and ask again.',
+        'Don’t count on it.',
+        'Reply hazy, try again.',
+      ];
+      let fortune;
+      const yes_no_fortunes_chance = 0.8;
+      if (Math.random() <= yes_no_fortunes_chance) {
+        const index = getRandomInt(0, yes_no_fortunes.length);
+        fortune = yes_no_fortunes[index];
+      } else {
+        const index = getRandomInt(0, maybe_fortunes.length);
+        fortune = maybe_fortunes[index];
+      }
 
       try {
         await message.reply('`' + fortune + '`');
