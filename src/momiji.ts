@@ -1,3 +1,4 @@
+import { SlowBuffer } from 'buffer';
 import {Dirent, readdirSync} from 'fs';
 
 import {BaseBot, Discord} from './BaseBot';
@@ -67,11 +68,12 @@ export class Momiji extends BaseBot implements MomijiAPI {
   protected OnMessage(message: Discord.Message): void {
     const command_char = '!';
     if(message.author.bot) return;
+    if(message.content.toLowerCase().includes("awoo")) this.ReactWithAwoo(message);
     if(message.content.startsWith(command_char)) {
       this.HandleCommand(message);
       return;
     }
-    if (message.content.startsWith('Momiji ') && message.content.endsWith('?')) {
+    if (message.content.startsWith('Momiji ')) {
       this.HandleQuestion(message);
       return;
     }
@@ -79,6 +81,7 @@ export class Momiji extends BaseBot implements MomijiAPI {
 
   protected OnMessageUpdate(old_message: Discord.Message, new_message: Discord.Message): void {
     if((old_message.content != new_message.content)) this.OnMessage(new_message);
+    if(new_message.content.toLowerCase().includes("awoo")) this.ReactWithAwoo(new_message);
   };
 
   protected OnDisconnect(): void {
@@ -134,8 +137,8 @@ export class Momiji extends BaseBot implements MomijiAPI {
   private async HandleQuestion(message: Discord.Message): Promise<void> {
     // slice off the inital "Momiji " (7 characters) and also trim any
     // punctuation (.!?)
-    const question =
-      message.content.slice(7, message.content.length).replace(/[.!?]/, "");
+    const question = message.content.slice(7, message.content.length)
+                       .replace(/[.!?]{1,}$/, "");
     if (question.includes('eller')) { // question is a choice separated by eller
       const alternative_eller_regex = /(.{1,},){1,}.{1,}eller.{1,}/gm
       let choices;
@@ -198,6 +201,14 @@ export class Momiji extends BaseBot implements MomijiAPI {
         console.error('Error on line ' + err.lineNumber + ': ' + err.message);
       }
     }
+
+  }
+
+  private ReactWithAwoo(message: Discord.Message): void {
+    if (!message.guild.emojis) return;
+    if (!this.client.emojis.has('274209467095318528')) return;
+    message.react(this.client.emojis.get('274209467095318528')!)
+    .catch(console.error);
 
   }
 
