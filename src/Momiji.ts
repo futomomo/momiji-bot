@@ -1,5 +1,6 @@
 import { SlowBuffer } from 'buffer';
 import {Dirent, readdirSync} from 'fs';
+import * as os from 'os';
 
 import {BaseBot, Discord} from './BaseBot';
 import {Command} from './Command';
@@ -41,7 +42,12 @@ export class Momiji extends BaseBot implements MomijiAPI {
     for(let entry of dir_list) {
       if(entry.isFile() && entry.name.endsWith('.js')) {
         try {
-          let module: any = await import('.\\commands\\'+entry.name); // this makes me feel bad  and probably only works on Windows TODO: fix somehow
+	  let module: any;
+	  if (os.type() === 'Windows_NT')
+	    module = await import('.\\commands\\'+entry.name); // this makes me feel bad  and probably only works on Windows TODO: fix somehow
+	  else
+	    module = await import('./commands/'+entry.name);
+
           if(module.GetCommand !== undefined) {
             const command: Command = module.GetCommand();
             const name: string = command.GetName();
