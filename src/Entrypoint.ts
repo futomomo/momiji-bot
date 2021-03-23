@@ -5,7 +5,7 @@ import {Momiji} from './Momiji';
 let token: string = '';
 
 try {
-    token = readFileSync('token', { 'encoding': 'utf8', 'flag': 'r' });
+    token = readFileSync('token', { 'encoding': 'utf8', 'flag': 'r' }).replace('\n', '');
     console.log('Successfully read token file.');
 }
 catch (err) {
