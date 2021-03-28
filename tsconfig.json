@@ -25,6 +25,7 @@
     "src/commands/Spurdo.ts",
     "src/commands/UwUTranslate.ts",
     "src/commands/Awooimg.ts",
+    "src/commands/RandomName.ts",
     "src/commands/RoR2Rand.ts"
   ]
 }
